@@ -3,6 +3,9 @@ nag2mqtt (0.6.2) unstable; urgency=low
   Changes:
   - Use CSS3 variables to colorize graphs.
 
+  Bugfixes:
+  - Add missing CSS defintions for Chart-DiskUtil.
+
  -- Thomas Liske <thomas@fiasko-nw.net>  
 
 nag2mqtt (0.6.1) unstable; urgency=low

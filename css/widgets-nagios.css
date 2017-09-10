@@ -119,6 +119,23 @@
 }
 
 
+.snmd-lcl-NagDiskUtil-disk_utilization {
+    fill: var(--SNMD_orange);
+    stroke: var(--SNMD_orange);
+    background-color: var(--SNMD_orange);
+}
+.snmd-tcl-NagDiskUtil-disk_utilization {
+    text-anchor: begin;
+    fill: var(--SNMD_orange);
+    transform: translate(3px, 13px);
+}
+
+.snmd-qt-NagHost {
+    font-weight: bolder;
+    margin: 0;
+}
+
+
 .snmd-lcl-NagWlcClients-connections {
     fill: var(--SNMD_violet);
     stroke: var(--SNMD_violet);
@@ -130,11 +147,6 @@
     transform: translate(3px, 13px);
 }
 
-
-.snmd-qt-NagHost {
-    font-weight: bolder;
-    margin: 0;
-}
 
 .snmd-qt-NagService {
     font-weight: bold;
