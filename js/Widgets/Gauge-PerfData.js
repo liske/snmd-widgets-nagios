@@ -75,7 +75,10 @@ define(["snmd-core/js/SVGWidget", "snmd-core/js/SVGImpl/Gauge", "snmd-widgets-na
         this.last = [];
         var i;
         for (i = 0; i < desc.topics.length; i++) {
-            this.last[desc.topics[i]] = [];
+            this.last[desc.topics[i]] = {
+                val: 0,
+                state: -1
+            };
         }
 
         this.max = (typeof desc.max === "undefined" ? 100 : desc.max);
@@ -100,7 +103,10 @@ define(["snmd-core/js/SVGWidget", "snmd-core/js/SVGImpl/Gauge", "snmd-widgets-na
             var i;
             for (i = 0; i < this.opts.keys.length; i++) {
                 if (typeof json.perf_data[this.opts.keys[i]] !== "undefined") {
-                    this.last[topic].val += parseFloat(json.perf_data[this.opts.keys[i]].val);
+                    var v = parseFloat(json.perf_data[this.opts.keys[i]].val);
+                    if (!isNaN(v)) {
+                        this.last[topic].val += v;
+                    }
                 }
             }
             this.last[topic].state = json.state;
@@ -112,11 +118,7 @@ define(["snmd-core/js/SVGWidget", "snmd-core/js/SVGImpl/Gauge", "snmd-widgets-na
         var state = 0;
         var t;
         for (t in this.last) {
-            var v = parseFloat(this.last[t].val);
-            if (isNaN(v)) {
-                v = 0;
-            }
-            val += v;
+            val += this.last[t].val;
             state = Math.max(state, this.last[t].state);
         }
         
