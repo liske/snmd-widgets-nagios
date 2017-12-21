@@ -13,6 +13,7 @@ DISTS:= \
 	dist/js/Widgets/Chart-IfQoS.js \
 	dist/js/Widgets/Chart-IfVPN.js \
 	dist/js/Widgets/Chart-OMDChecks.js \
+	dist/js/Widgets/Chart-PerfData.js \
 	dist/js/Widgets/Chart-UpsLoad.js \
 	dist/js/Widgets/Chart-WlcClients.js \
 	dist/js/Widgets/Class-State.js \
