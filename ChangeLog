@@ -1,4 +1,11 @@
-nag2mqtt (0.6.2) unstable; urgency=low
+snmd-widgets-nagios (0.6.4) unstable; urgency=low
+
+  Features:
+  - Add generic Chart-PerfData class.
+
+ -- Thomas Liske <thomas@fiasko-nw.net>  
+
+snmd-widgets-nagios (0.6.2) unstable; urgency=low
 
   Changes:
   - Use CSS3 variables to colorize graphs.
@@ -6,16 +13,16 @@ nag2mqtt (0.6.2) unstable; urgency=low
   Bugfixes:
   - Add missing CSS defintions for Chart-DiskUtil.
 
- -- Thomas Liske <thomas@fiasko-nw.net>  
+ -- Thomas Liske <thomas@fiasko-nw.net>  Mon Sep 4 22:55:17 2017 +0200
 
-nag2mqtt (0.6.1) unstable; urgency=low
+snmd-widgets-nagios (0.6.1) unstable; urgency=low
 
   * Use widget name as notification title.
   * Include hostname and service description in notification body.
 
  -- Thomas Liske <thomas@fiasko-nw.net>  Mon, 04 Sep 2017 22:53:45 +0200
 
-nag2mqtt (0.6.0) unstable; urgency=low
+snmd-widgets-nagios (0.6.0) unstable; urgency=low
 
   * Support desktop notifications (requires snmd-core 0.4.0+).
   * Lintian fixes.

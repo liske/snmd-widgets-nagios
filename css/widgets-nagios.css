@@ -148,6 +148,28 @@
 }
 
 
+.snmd-lcl-NagPerfData-0 {
+    fill: var(--SNMD_magenta);
+    stroke: var(--SNMD_magenta);
+    background-color: var(--SNMD_magenta);
+}
+.snmd-lcl-NagPerfData-1 {
+    stroke: var(--S_violet);
+    background-color: var(--S_violet);
+}
+
+.snmd-tcl-NagPerfData-0 {
+    text-anchor: begin;
+    fill: var(--SNMD_magenta);
+    transform: translate(3px, 13px);
+}
+.snmd-tcl-NagPerfData-1 {
+    text-anchor: end;
+    fill: var(--S_violet);
+    transform: translate(-3px, 13px);
+}
+
+
 .snmd-qt-NagService {
     font-weight: bold;
     margin: 0 0 0 1em;

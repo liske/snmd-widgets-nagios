@@ -32,7 +32,8 @@ License:
 */
 
 /*global
-    define
+    define,
+    Map
 */
 
 define(["snmd-core/js/SVGWidget", "snmd-core/js/SVGImpl/Chart", "snmd-widgets-nagios/js/Utils", "js-logger"], function (SVGWidget, SVGImplChart, Utils, Logger) {
@@ -40,13 +41,6 @@ define(["snmd-core/js/SVGWidget", "snmd-core/js/SVGImpl/Chart", "snmd-widgets-na
 
     var ChartPerfData = function (root, svg, desc) {
         this.opts = {
-            title: "Performance Data",
-            axis: [
-                {
-                    max: 100,
-                    scale: 'linear'
-                }
-            ],
             desc: desc,
             dpi: 60 / 5 / 60,
             cls: SVGWidget.srClassOpts(desc, "Chart"),               /* rect classes    */
@@ -55,13 +49,78 @@ define(["snmd-core/js/SVGWidget", "snmd-core/js/SVGImpl/Chart", "snmd-widgets-na
             tcls: ['snmd-tcl-Nag', 'snmd-tcl-NagPerf', 'snmd-tcl-NagPerfData']      /* text classes    */
         };
 
-        this.lines = [
-            {
-                name: 'connections',
-                axis: 0,
-                unit: ' STA'
-            }
-        ];
+        if(typeof desc.title === "string") {
+            this.opts.title = desc.title;
+        }
+        else {
+            this.opts.title = "Performance Data";
+        }
+
+        if(typeof desc.axis === "object") {
+            this.opts.axis = desc.axis.map(function (d) {
+                var a = {};
+
+                if(typeof d.max === "number") {
+                    a.max = d.max;
+                }
+                else {
+                    a.max = 100;
+                }
+
+                if(typeof d.scale === "string") {
+                    a.scale = d.scale;
+                }
+                else {
+                    a.scale = "linear";
+                }
+
+                return a;
+            });
+        }
+        else {
+            this.opts.axis = [
+                {
+                    max: 100,
+                    scale: 'linear'
+                }
+            ];
+        }
+
+
+        this.graphs = desc.graphs.map(function (g, i) {
+          if(typeof g.name !== "string") {
+            g.name = "noname" + i;
+          }
+
+          if(typeof g.axis !== "number") {
+            g.axis = 0;
+          }
+
+          if(typeof g.unit !== "string") {
+            g.unit = "";
+          }
+
+          var keys = g.keys;
+          g.keys = new Map();
+
+          if(typeof g.factors !== "undefined") {
+            keys.map(function (k, j) {
+              if(typeof g.factors[j] !== "undefined") {
+                g.keys.set(k, parseFloat(g.factors[j]));
+              }
+              else {
+              g.keys.set(k, 1.0);
+              }
+            });
+          }
+          else {
+            keys.forEach(function (k) {
+              g.keys.set(k, 1.0);
+            });
+          }
+
+          return g;
+        });
         
         this.desc = desc;
         this.last = [];
@@ -69,13 +128,13 @@ define(["snmd-core/js/SVGWidget", "snmd-core/js/SVGImpl/Chart", "snmd-widgets-na
         for (t = 0; t < desc.topics.length; t++) {
             this.last[desc.topics[t]] = [];
             var i;
-            for (i = 0; i < this.lines.length; i++) {
+            for (i = 0; i < this.graphs.length; i++) {
                 this.last[desc.topics[t]][i] = [];
             }
         }
 
-        this.chart = new SVGImplChart(root, svg, this.opts, this.lines, Utils.qTipConfig(this, this.lines.map(function (l) {
-            return l.name;
+        this.chart = new SVGImplChart(root, svg, this.opts, this.graphs, Utils.qTipConfig(this, this.graphs.map(function (g) {
+            return g.name;
         })));
     };
     
@@ -92,14 +151,20 @@ define(["snmd-core/js/SVGWidget", "snmd-core/js/SVGImpl/Chart", "snmd-widgets-na
 
         var i;
         var v;
-        for (i = 0; i < this.lines.length; i++) {
+        var fKeySum = function (f, k) {
+          var w = parseInt(json.perf_data[k].val, 10);
+          if (!isNaN(w)) {
+              v += w * f;
+          }
+        };
+        for (i = 0; i < this.graphs.length; i++) {
             this.last[topic][i].val = 0;
             this.last[topic][i].state = 0;
             try {
-                v = parseInt(json.perf_data[this.lines[i].name].val, 10);
-                if (!isNaN(v)) {
-                    this.last[topic][i].val = v;
-                }
+                v = 0;
+                this.graphs[i].keys.forEach(fKeySum);
+
+                this.last[topic][i].val = v;
             } catch (err_perf) {
                 Logger.debug("[Nagios/Chart-PerfData] Error processing performance data of " + topic + "[" + i + "]: " + err_perf.message);
             }
@@ -112,7 +177,7 @@ define(["snmd-core/js/SVGWidget", "snmd-core/js/SVGImpl/Chart", "snmd-widgets-na
         
         var vals = [];
         var state = 0;
-        for (i = 0; i < this.lines.length; i++) {
+        for (i = 0; i < this.graphs.length; i++) {
             vals[i] = 0;
 
             var t;
