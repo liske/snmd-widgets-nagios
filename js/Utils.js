@@ -66,7 +66,7 @@ define(["snmd-core/js/Notify", "jquery"], function (Notify, $) {
                 var classes = 'snmd-qt-nocls';
                 if (Array.isArray(that.opts.lcls)) {
                     classes = that.opts.lcls.map(function (c) {
-                        return c + "-" + l;
+                        return c + "-" + l + " " + c + "-" + i;
                     }).join(' ');
                 }
 
