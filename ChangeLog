@@ -3,7 +3,7 @@ snmd-widgets-nagios (0.6.4) unstable; urgency=low
   Features:
   - Add generic Chart-PerfData class.
 
- -- Thomas Liske <thomas@fiasko-nw.net>  
+ -- Thomas Liske <thomas@fiasko-nw.net>  Wed, 27 Dec 2017 09:08:01 +0100
 
 snmd-widgets-nagios (0.6.2) unstable; urgency=low
 
